@@ -1,2 +1,3 @@
-from train import *
-from distillate import *
+from .train import *
+from .compression import *
+from .torchstat import *

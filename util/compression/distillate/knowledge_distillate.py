@@ -3,7 +3,7 @@ import torch.nn as nn
 import time
 
 
-def distillate(train_loader, test_loader, teacher_model, student_model, optimizer, device=torch.device('cpu'),
+def knowledge_distillate(train_loader, test_loader, teacher_model, student_model, optimizer, device=torch.device('cpu'),
                epochs=10, temperature=7, hard_loss=nn.CrossEntropyLoss(),
                soft_loss=nn.KLDivLoss(reduction="batchmean"), alpha=0.3):
     '''

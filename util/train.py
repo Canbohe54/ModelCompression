@@ -3,9 +3,23 @@ import time
 import torch.nn as nn
 
 
-def train(train_loader, test_loader, model, optimizer, epochs=10, loss_func=nn.CrossEntropyLoss(), device=torch.device('cpu')):
+def adjust_learning_rate(optimizer, epoch, learning_rate):  # lr优化
+    if epoch < 80:
+        lr = learning_rate
+    elif epoch < 120:
+        lr = 0.1 * learning_rate
+    else:
+        lr = 0.01 * learning_rate
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
+
+
+def train(train_loader, test_loader, model, optimizer, epochs=10, loss_func=nn.CrossEntropyLoss(),
+          device=torch.device('cpu'), learning_rate_adjust=False, learning_rate=0.1):
     '''
     训练模型
+    :param learing_rate: 初始学习率，仅在动态调整时有效
+    :param learning_rate_adjust: 是否动态调整学习率
     :param train_loader: 训练集
     :param test_loader: 测试集
     :param model: 模型
@@ -15,13 +29,15 @@ def train(train_loader, test_loader, model, optimizer, epochs=10, loss_func=nn.C
     :param epochs: 迭代次数
     :return:最佳模型，最佳代，最佳准确率
     '''
-    print('Train'.center(32,'.'))
+    print('Train'.center(32, '.'))
     # 记录每个epoch的loss和acc
     best_acc = 0
     best_epoch = 0
     best_model = model
     # 训练过程
     for epoch in range(1, epochs):
+        if learning_rate_adjust:
+            adjust_learning_rate(optimizer=optimizer, epoch=epoch, learning_rate=learning_rate)
         # 设置计时器，计算每个epoch的用时
         start_time = time.time()
         model.train()  # 保证每一个batch都能进入model.train()的模式
