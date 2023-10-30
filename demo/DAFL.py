@@ -127,16 +127,16 @@ class DAFL:
             self.activation_loss_gamma = dafl_config["activation_loss_gamma"]
 
     def distillate(self):
-        transform_test = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ])
-        data_test = CIFAR10("./data",
-                             train=False,
-                             transform=transform_test)
-        data_test_loader = DataLoader(data_test, batch_size=self.batch_size, num_workers=0)
-        best_acc_epoch = 0
-        best_acc = 0
+        # transform_test = transforms.Compose([
+        #     transforms.ToTensor(),
+        #     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+        # ])
+        # data_test = CIFAR10("./data",
+        #                      train=False,
+        #                      transform=transform_test)
+        # data_test_loader = DataLoader(data_test, batch_size=self.batch_size, num_workers=0)
+        # best_acc_epoch = 0
+        # best_acc = 0
 
         generator = Generator(self.img_size, self.latent_dim, self.channels).to(device=self.device)
         if not self.teacher_model_structured:
@@ -233,27 +233,27 @@ class DAFL:
             test_acc = 0
             test_loss = 0.0
             test_data_size = 0
-            with torch.no_grad():
-                for i, (images, labels) in enumerate(data_test_loader):
-                    images = images.cuda()
-                    labels = labels.cuda()
-                    student.eval()
-                    output = student(images)
-                    loss = hard_loss(output, labels)
-                    outputs = nn.functional.softmax(output, dim=1)
-                    pred = torch.argmax(outputs, dim=1)
-                    acc = torch.sum(pred == labels)
-                    test_loss += loss.item()
-                    test_acc += acc.item()
-                    test_data_size += labels.size(0)
-
-            test_loss_epoch = test_loss / test_data_size
-            test_acc_epoch = test_acc / test_data_size
-            print('Test. Loss: %f, Accuracy: %f' % (test_loss_epoch, test_acc_epoch))
-            if best_acc < test_acc_epoch:
-                best_acc = test_acc_epoch
-                best_acc_epoch = epoch + 1
-            print('best_acc: %f, best_acc_epoch: %d' % (best_acc, best_acc_epoch))
+            # with torch.no_grad():
+            #     for i, (images, labels) in enumerate(data_test_loader):
+            #         images = images.cuda()
+            #         labels = labels.cuda()
+            #         student.eval()
+            #         output = student(images)
+            #         loss = hard_loss(output, labels)
+            #         outputs = nn.functional.softmax(output, dim=1)
+            #         pred = torch.argmax(outputs, dim=1)
+            #         acc = torch.sum(pred == labels)
+            #         test_loss += loss.item()
+            #         test_acc += acc.item()
+            #         test_data_size += labels.size(0)
+            #
+            # test_loss_epoch = test_loss / test_data_size
+            # test_acc_epoch = test_acc / test_data_size
+            # print('Test. Loss: %f, Accuracy: %f' % (test_loss_epoch, test_acc_epoch))
+            # if best_acc < test_acc_epoch:
+            #     best_acc = test_acc_epoch
+            #     best_acc_epoch = epoch + 1
+            # print('best_acc: %f, best_acc_epoch: %d' % (best_acc, best_acc_epoch))
 
         return best_model
 
