@@ -168,7 +168,7 @@ class DAFL:
         teacher = nn.DataParallel(teacher_model)
         teacher = teacher.module
 
-        # generator = torch.load(self.student_model_dir[:-11]+"generator.pth")
+        generator = torch.load(self.student_model_dir[:-11]+"generator.pth")
 
         generator = nn.DataParallel(generator)
 
@@ -184,7 +184,7 @@ class DAFL:
         if self.student_model_type == "alexnet":
             student_model = torchvision.models.alexnet(num_classes=self.classes).to(device=self.device)
 
-        # student_model = torch.load(self.student_model_dir)
+        student_model = torch.load(self.student_model_dir)
         student = nn.DataParallel(student_model)
 
         # Optimizers

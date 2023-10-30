@@ -1,4 +1,3 @@
-import ptflops
 import torch
 import yaml
 import torchsummary
