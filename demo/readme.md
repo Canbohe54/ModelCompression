@@ -1,5 +1,5 @@
 # demo
-### Requitments
+### RequireSments
 
 - python 3
 - pyyaml
