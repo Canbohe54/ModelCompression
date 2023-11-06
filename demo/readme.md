@@ -1,5 +1,5 @@
 # demo
-### RequireSments
+### Requirements
 
 - python 3
 - pyyaml
@@ -14,18 +14,21 @@
 ### Run the demo
 - create 3 folder in demo
 
+```
+/data   /origin_model   /output_model
+```
 
-    /data   /origin_model   /output_model
 - run these commands in turn:
 
-
+```
     python origin_train.py
 
     python DAFL.py
 
     python evaluate.py
-
+```
 ### Change configs
+```yaml
     classes: 10
     #input_model_type: "resnet18"
     #output_model_type: "shufflenet_v2_x0_5"
@@ -61,7 +64,7 @@
       one_hot_loss_alpha: 0.05
       information_entropy_loss_beta: 5
       activation_loss_gamma: 0.1
-
+```
 ### Update logs
 - 2023/10/25
   - 在pytorch2复现DAFL方法
